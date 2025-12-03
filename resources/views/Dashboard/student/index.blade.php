@@ -290,6 +290,11 @@ const secondaryColor = getSecondaryColor();
 
 // Score Progress Chart
 const scoreProgressCtx = document.getElementById('scoreProgressChart').getContext('2d');
+const scoreProgressGradient = scoreProgressCtx.createLinearGradient(0, 0, 0, 300);
+scoreProgressGradient.addColorStop(0, secondaryColor.rgba(0.4));
+scoreProgressGradient.addColorStop(0.5, secondaryColor.rgba(0.15));
+scoreProgressGradient.addColorStop(1, secondaryColor.rgba(0.02));
+
 new Chart(scoreProgressCtx, {
     type: 'line',
             data: {
@@ -298,7 +303,7 @@ new Chart(scoreProgressCtx, {
                     label: 'Rata-rata Score',
                     data: {!! json_encode($scoreProgress->pluck('avg_score')) !!},
                     borderColor: secondaryColor.rgb,
-                    backgroundColor: secondaryColor.rgba(0.1),
+                    backgroundColor: scoreProgressGradient,
                     tension: 0.4,
                     fill: true,
                     borderWidth: 2
@@ -329,6 +334,11 @@ new Chart(scoreProgressCtx, {
 
 // Category Performance Chart
 const categoryCtx = document.getElementById('categoryPerformanceChart').getContext('2d');
+const categoryGradient = categoryCtx.createLinearGradient(0, 0, 0, 300);
+categoryGradient.addColorStop(0, secondaryColor.rgba(0.9));
+categoryGradient.addColorStop(0.5, secondaryColor.rgba(0.7));
+categoryGradient.addColorStop(1, secondaryColor.rgba(0.45));
+
 new Chart(categoryCtx, {
     type: 'bar',
             data: {
@@ -336,7 +346,8 @@ new Chart(categoryCtx, {
                 datasets: [{
                     label: 'Rata-rata Score',
                     data: {!! json_encode($categoryPerformance->pluck('avg_score')) !!},
-                    backgroundColor: secondaryColor.rgba(0.8)
+                    backgroundColor: categoryGradient,
+                    borderRadius: 4
                 }]
             },
     options: {
@@ -364,6 +375,11 @@ new Chart(categoryCtx, {
 
 // Weekly Activity Chart
 const weeklyCtx = document.getElementById('weeklyActivityChart').getContext('2d');
+const weeklyGradient = weeklyCtx.createLinearGradient(0, 0, 0, 300);
+weeklyGradient.addColorStop(0, secondaryColor.rgba(0.9));
+weeklyGradient.addColorStop(0.5, secondaryColor.rgba(0.7));
+weeklyGradient.addColorStop(1, secondaryColor.rgba(0.45));
+
 new Chart(weeklyCtx, {
     type: 'bar',
             data: {
@@ -371,7 +387,8 @@ new Chart(weeklyCtx, {
                 datasets: [{
                     label: 'Ujian Selesai',
                     data: {!! json_encode($weeklyActivity->pluck('count')) !!},
-                    backgroundColor: secondaryColor.rgba(0.8)
+                    backgroundColor: weeklyGradient,
+                    borderRadius: 4
                 }]
             },
     options: {
@@ -392,6 +409,11 @@ new Chart(weeklyCtx, {
 
 // Accuracy Trend Chart
 const accuracyCtx = document.getElementById('accuracyTrendChart').getContext('2d');
+const accuracyGradient = accuracyCtx.createLinearGradient(0, 0, 0, 300);
+accuracyGradient.addColorStop(0, secondaryColor.rgba(0.4));
+accuracyGradient.addColorStop(0.5, secondaryColor.rgba(0.15));
+accuracyGradient.addColorStop(1, secondaryColor.rgba(0.02));
+
 new Chart(accuracyCtx, {
     type: 'line',
             data: {
@@ -400,7 +422,7 @@ new Chart(accuracyCtx, {
                     label: 'Akurasi (%)',
                     data: {!! json_encode($accuracyTrend->pluck('accuracy')) !!},
                     borderColor: secondaryColor.rgb,
-                    backgroundColor: secondaryColor.rgba(0.1),
+                    backgroundColor: accuracyGradient,
                     tension: 0.4,
                     fill: true,
                     borderWidth: 2

@@ -93,20 +93,51 @@
             border-color: var(--secondary-color) !important;
         }
         
-        /* Apply secondary color to charts */
-        canvas {
-            --chart-primary: var(--primary-color);
-            --chart-secondary: var(--secondary-color);
+        /* Input and Select - using secondary color for focus */
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--secondary-color) !important;
+            --tw-ring-color: var(--secondary-color) !important;
+        }
+        input.focus\:ring-gray-900:focus,
+        select.focus\:ring-gray-900:focus,
+        textarea.focus\:ring-gray-900:focus {
+            --tw-ring-color: var(--secondary-color) !important;
+            border-color: var(--secondary-color) !important;
+        }
+        input.focus\:border-gray-900:focus,
+        select.focus\:border-gray-900:focus,
+        textarea.focus\:border-gray-900:focus {
+            border-color: var(--secondary-color) !important;
         }
         
-        /* Chart.js default colors override */
-        .chart-container canvas,
-        canvas[data-chart] {
-            --chart-color-1: var(--secondary-color);
-            --chart-color-2: rgba(var(--secondary-rgb), 0.8);
-            --chart-color-3: rgba(var(--secondary-rgb), 0.6);
-            --chart-color-4: rgba(var(--secondary-rgb), 0.4);
-            --chart-color-5: rgba(var(--secondary-rgb), 0.2);
+        /* Pagination - using secondary color */
+        nav[role="navigation"] a,
+        nav[role="navigation"] span,
+        nav[role="navigation"] .relative a,
+        nav[role="navigation"] .relative span,
+        nav[role="navigation"] .flex a,
+        nav[role="navigation"] .flex span,
+        nav[role="navigation"] .inline-flex a,
+        nav[role="navigation"] .inline-flex span {
+            color: var(--secondary-color) !important;
+        }
+        nav[role="navigation"] a:hover {
+            background-color: rgba(var(--secondary-rgb), 0.1) !important;
+            border-color: var(--secondary-color) !important;
+        }
+        nav[role="navigation"] .relative.z-10,
+        nav[role="navigation"] .z-10,
+        nav[role="navigation"] .relative.z-10 span,
+        nav[role="navigation"] .z-10 span {
+            background-color: var(--secondary-color) !important;
+            border-color: var(--secondary-color) !important;
+            color: white !important;
+        }
+        nav[role="navigation"] .relative.z-10 span,
+        nav[role="navigation"] .z-10 span {
+            color: white !important;
         }
         
         /* Badge and label supporting elements */
@@ -124,6 +155,18 @@
         /* Progress bars and indicators */
         .progress-bar-secondary {
             background-color: var(--secondary-color) !important;
+        }
+        
+        /* Links and interactive elements - using primary color */
+        a.text-gray-900:hover,
+        a.text-gray-700:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        /* Active states - using primary color */
+        .active,
+        [aria-current="page"] {
+            color: var(--primary-color) !important;
         }
         
         /* Apply primary color to common elements */

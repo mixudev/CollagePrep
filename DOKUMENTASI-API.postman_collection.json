@@ -1,0 +1,986 @@
+{
+	"info": {
+		"_postman_id": "uts-elearning-api",
+		"name": "E-Learning Tryout UTBK API",
+		"description": "Dokumentasi API untuk Platform E-Learning Tryout UTBK/SBMPTN\n\nBase URL: http://localhost:8000\n\nAuthentication: Session-based (Laravel)\n\nUntuk menggunakan API ini, pastikan:\n1. Server Laravel sudah berjalan\n2. Sudah melakukan login terlebih dahulu\n3. Menggunakan session cookie yang valid",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": ["{{base_url}}"],
+							"path": ["login"]
+						},
+						"description": "Endpoint untuk melakukan login ke sistem"
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"username\": \"johndoe\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"role\": \"student\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": ["{{base_url}}"],
+							"path": ["register"]
+						},
+						"description": "Endpoint untuk registrasi user baru"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/logout",
+							"host": ["{{base_url}}"],
+							"path": ["logout"]
+						},
+						"description": "Endpoint untuk logout dari sistem"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Modules (CRUD)",
+			"item": [
+				{
+					"name": "GET - List Modules",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/modules",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "modules"]
+						},
+						"description": "Mendapatkan daftar semua modul (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Show Module",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/modules/:id",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "modules", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Mendapatkan detail modul berdasarkan ID"
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Create Module",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "category_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "Tryout TPS 001",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Tryout Tes Potensi Skolastik",
+									"type": "text"
+								},
+								{
+									"key": "duration",
+									"value": "120",
+									"type": "text"
+								},
+								{
+									"key": "passing_grade",
+									"value": "70",
+									"type": "text"
+								},
+								{
+									"key": "max_attempts",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "is_published",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "show_ranking",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "show_answer_after_submit",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/modules",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "modules"]
+						},
+						"description": "Membuat modul baru"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT - Update Module",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "category_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "Tryout TPS 001 - Updated",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "TPS-001",
+									"type": "text"
+								},
+								{
+									"key": "duration",
+									"value": "150",
+									"type": "text"
+								},
+								{
+									"key": "passing_grade",
+									"value": "75",
+									"type": "text"
+								},
+								{
+									"key": "max_attempts",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/modules/:id",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "modules", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Mengupdate modul yang sudah ada"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE - Delete Module",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/modules/:id",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "modules", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Menghapus modul (soft delete)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Questions (CRUD)",
+			"item": [
+				{
+					"name": "GET - Create Question Form",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/questions/create?module_id=1",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "questions", "create"],
+							"query": [
+								{
+									"key": "module_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Menampilkan form untuk membuat soal baru"
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Create Question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "module_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "category_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "question_text",
+									"value": "Apa ibu kota Indonesia?",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "multiple_choice",
+									"type": "text"
+								},
+								{
+									"key": "points",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "difficulty",
+									"value": "easy",
+									"type": "text"
+								},
+								{
+									"key": "explanation",
+									"value": "Jakarta adalah ibu kota Indonesia",
+									"type": "text"
+								},
+								{
+									"key": "correct_option",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "options[0][option_label]",
+									"value": "A",
+									"type": "text"
+								},
+								{
+									"key": "options[0][option_text]",
+									"value": "Jakarta",
+									"type": "text"
+								},
+								{
+									"key": "options[1][option_label]",
+									"value": "B",
+									"type": "text"
+								},
+								{
+									"key": "options[1][option_text]",
+									"value": "Bandung",
+									"type": "text"
+								},
+								{
+									"key": "options[2][option_label]",
+									"value": "C",
+									"type": "text"
+								},
+								{
+									"key": "options[2][option_text]",
+									"value": "Surabaya",
+									"type": "text"
+								},
+								{
+									"key": "options[3][option_label]",
+									"value": "D",
+									"type": "text"
+								},
+								{
+									"key": "options[3][option_text]",
+									"value": "Yogyakarta",
+									"type": "text"
+								},
+								{
+									"key": "question_image",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/questions",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "questions"]
+						},
+						"description": "Membuat soal baru"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT - Update Question",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "module_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "category_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "question_text",
+									"value": "Apa ibu kota Indonesia? (Updated)",
+									"type": "text"
+								},
+								{
+									"key": "points",
+									"value": "15",
+									"type": "text"
+								},
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/questions/:id",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "questions", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Mengupdate soal yang sudah ada"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE - Delete Question",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/questions/:id",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "questions", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Menghapus soal"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories (CRUD)",
+			"item": [
+				{
+					"name": "GET - List Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/categories",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "categories"]
+						},
+						"description": "Mendapatkan daftar semua kategori"
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Tes Potensi Skolastik",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "TPS",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Kategori untuk soal TPS",
+									"type": "text"
+								},
+								{
+									"key": "icon",
+									"value": "book",
+									"type": "text"
+								},
+								{
+									"key": "color",
+									"value": "#3B82F6",
+									"type": "text"
+								},
+								{
+									"key": "is_active",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/categories",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "categories"]
+						},
+						"description": "Membuat kategori baru"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT - Update Category",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Tes Potensi Skolastik - Updated",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "TPS",
+									"type": "text"
+								},
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/categories/:id",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "categories", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Mengupdate kategori"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE - Delete Category",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/categories/:id",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "categories", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Menghapus kategori"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users (CRUD)",
+			"item": [
+				{
+					"name": "GET - List Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/users",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "users"]
+						},
+						"description": "Mendapatkan daftar semua user"
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "John Doe",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "john@example.com",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "johndoe",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password123",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "student",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "active",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/users",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "users"]
+						},
+						"description": "Membuat user baru"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT - Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "John Doe Updated",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "john.updated@example.com",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "student",
+									"type": "text"
+								},
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/users/:id",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "users", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Mengupdate user"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE - Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/users/:id",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "users", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Menghapus user (soft delete)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Exam",
+			"item": [
+				{
+					"name": "GET - Start Exam",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/modules/:module_id/exam",
+							"host": ["{{base_url}}"],
+							"path": ["modules", ":module_id", "exam"],
+							"variable": [
+								{
+									"key": "module_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Memulai ujian untuk modul tertentu (Student only)"
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Save Answer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"question_id\": 1,\n    \"selected_option_id\": 3,\n    \"is_marked\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/exam/:student_module_id/answer",
+							"host": ["{{base_url}}"],
+							"path": ["exam", ":student_module_id", "answer"],
+							"variable": [
+								{
+									"key": "student_module_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Menyimpan jawaban siswa (auto-save)"
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Submit Exam",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRF-TOKEN",
+								"value": "{{csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/exam/:student_module_id/submit",
+							"host": ["{{base_url}}"],
+							"path": ["exam", ":student_module_id", "submit"],
+							"variable": [
+								{
+									"key": "student_module_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Submit ujian dan hitung skor"
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Exam Result",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/exam/:student_module_id/result",
+							"host": ["{{base_url}}"],
+							"path": ["exam", ":student_module_id", "result"],
+							"variable": [
+								{
+									"key": "student_module_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Mendapatkan hasil ujian"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "GET - Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/dashboard",
+							"host": ["{{base_url}}"],
+							"path": ["dashboard"]
+						},
+						"description": "Mendapatkan data dashboard (berbeda untuk admin dan student)"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "csrf_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
+

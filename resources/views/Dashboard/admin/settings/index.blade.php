@@ -109,52 +109,6 @@
                                                         </div>
                                                     </div>
                                                     
-                                                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                                                        <div class="text-xs font-medium text-gray-700 mb-2">
-                                                            Preview Penggunaan:
-                                                        </div>
-                                                        @if($setting->key === 'primary_color')
-                                                            <div class="space-y-2">
-                                                                <button class="w-full px-4 py-2.5 rounded-lg text-white font-medium text-sm transition-colors" 
-                                                                        style="background-color: {{ $setting->value ?: '#111827' }}"
-                                                                        id="preview-btn-{{ $setting->key }}">
-                                                                    <span class="flex items-center justify-center">
-                                                                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                                        </svg>
-                                                                        Tombol Utama
-                                                                    </span>
-                                                                </button>
-                                                                <div class="px-4 py-2 rounded-lg border-2 text-sm font-medium" 
-                                                                     style="border-color: {{ $setting->value ?: '#111827' }}; color: {{ $setting->value ?: '#111827' }}"
-                                                                     id="preview-border-{{ $setting->key }}">
-                                                                    Border & Text Utama
-                                                                </div>
-                                                                <div class="text-xs text-gray-600 mt-2">
-                                                                    <strong>Digunakan untuk:</strong> Tombol, border, focus ring, navbar indicator, avatar
-                                                                </div>
-                                                            </div>
-                                                        @else
-                                                            <div class="space-y-2">
-                                                                <div class="h-8 rounded-lg flex items-center justify-center text-white text-xs font-medium"
-                                                                     style="background-color: {{ $setting->value ?: '#f97316' }}"
-                                                                     id="preview-chart-{{ $setting->key }}">
-                                                                    Chart Bar
-                                                                </div>
-                                                                <div class="flex items-center space-x-2">
-                                                                    <div class="w-3 h-3 rounded-full" 
-                                                                         style="background-color: {{ $setting->value ?: '#f97316' }}"
-                                                                         id="preview-dot-{{ $setting->key }}"></div>
-                                                                    <span class="text-sm" style="color: {{ $setting->value ?: '#f97316' }}" id="preview-text-{{ $setting->key }}">
-                                                                        Badge & Label Pendukung
-                                                                    </span>
-                                                                </div>
-                                                                <div class="text-xs text-gray-600 mt-2">
-                                                                    <strong>Digunakan untuk:</strong> Chart, badge, label, icon pendukung, aksen
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    </div>
                                                 </div>
                                                 <script>
                                                     document.addEventListener('DOMContentLoaded', function() {
@@ -163,25 +117,23 @@
                                                         const currentColor = '{{ $setting->value ?: ($setting->key === 'primary_color' ? '#111827' : '#f97316') }}';
                                                         
                                                         function updateColor(value) {
-                                                            const hexValue = value.startsWith('#') ? value : '#' + value;
+                                                            // Handle input with or without #
+                                                            let hexValue = value.trim();
+                                                            if (!hexValue.startsWith('#')) {
+                                                                hexValue = '#' + hexValue;
+                                                            }
+                                                            
+                                                            // Validate hex color
                                                             if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hexValue)) {
+                                                                // Convert 3-digit to 6-digit hex
                                                                 const fullHex = hexValue.length === 4 
                                                                     ? '#' + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2] + hexValue[3] + hexValue[3]
                                                                     : hexValue;
                                                                 
+                                                                // Update inputs
                                                                 colorInput.value = fullHex;
-                                                                textInput.value = fullHex.replace('#', '');
+                                                                textInput.value = fullHex.replace('#', '').toUpperCase();
                                                                 
-                                                                // Update previews
-                                                                @if($setting->key === 'primary_color')
-                                                                    document.getElementById('preview-btn-{{ $setting->key }}').style.backgroundColor = fullHex;
-                                                                    document.getElementById('preview-border-{{ $setting->key }}').style.borderColor = fullHex;
-                                                                    document.getElementById('preview-border-{{ $setting->key }}').style.color = fullHex;
-                                                                @else
-                                                                    document.getElementById('preview-chart-{{ $setting->key }}').style.backgroundColor = fullHex;
-                                                                    document.getElementById('preview-dot-{{ $setting->key }}').style.backgroundColor = fullHex;
-                                                                    document.getElementById('preview-text-{{ $setting->key }}').style.color = fullHex;
-                                                                @endif
                                                             }
                                                         }
                                                         
@@ -190,7 +142,19 @@
                                                         });
                                                         
                                                         textInput.addEventListener('input', function() {
-                                                            updateColor(this.value);
+                                                            // Only allow hex characters
+                                                            this.value = this.value.replace(/[^A-Fa-f0-9]/g, '').toUpperCase();
+                                                            if (this.value.length <= 6) {
+                                                                updateColor(this.value);
+                                                            }
+                                                        });
+                                                        
+                                                        textInput.addEventListener('paste', function(e) {
+                                                            e.preventDefault();
+                                                            const pasted = (e.clipboardData || window.clipboardData).getData('text');
+                                                            const cleaned = pasted.replace(/[^A-Fa-f0-9]/g, '').substring(0, 6).toUpperCase();
+                                                            this.value = cleaned;
+                                                            updateColor(cleaned);
                                                         });
                                                         
                                                         // Initialize
@@ -229,44 +193,6 @@
                         </div>
                     </div>
                 @endforeach
-
-                <!-- Color Preview Section -->
-                @php
-                    $primaryColor = \App\Models\Setting::getValue('primary_color', '#111827');
-                    $secondaryColor = \App\Models\Setting::getValue('secondary_color', '#f97316');
-                @endphp
-                <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-                    <div class="bg-gray-50 border-b border-gray-200 px-6 py-4">
-                        <h2 class="text-base font-semibold text-gray-900">Preview Warna</h2>
-                        <p class="text-xs text-gray-600 mt-1">Lihat bagaimana warna akan diterapkan</p>
-                    </div>
-                    <div class="p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <div class="text-sm font-medium text-gray-700 mb-2">Warna Utama</div>
-                                <div class="space-y-2">
-                                    <button class="w-full px-4 py-2.5 rounded-lg text-white font-medium" style="background-color: {{ $primaryColor }}">
-                                        Tombol Utama
-                                    </button>
-                                    <div class="px-4 py-2 rounded-lg border-2" style="border-color: {{ $primaryColor }}; color: {{ $primaryColor }}">
-                                        Border & Text Utama
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="text-sm font-medium text-gray-700 mb-2">Warna Pendukung</div>
-                                <div class="space-y-2">
-                                    <button class="w-full px-4 py-2.5 rounded-lg text-white font-medium" style="background-color: {{ $secondaryColor }}">
-                                        Tombol Pendukung
-                                    </button>
-                                    <div class="px-4 py-2 rounded-lg border-2" style="border-color: {{ $secondaryColor }}; color: {{ $secondaryColor }}">
-                                        Border & Text Pendukung
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Form Actions -->
                 <div class="flex items-center justify-end space-x-4 pt-4">

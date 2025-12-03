@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::get('/', function () {
-    return view('landing');
-})->name('landing');
+    return view('welcome');
+})->name('welcome');
 
 // Authentication routes
 Route::middleware('guest')->group(function () {

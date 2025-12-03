@@ -315,20 +315,25 @@ const secondaryColor = getSecondaryColor();
 
 // Completion by Month Chart
 const completionCtx = document.getElementById('completionChart').getContext('2d');
+const completionGradient = completionCtx.createLinearGradient(0, 0, 0, 300);
+completionGradient.addColorStop(0, secondaryColor.rgba(0.4));
+completionGradient.addColorStop(0.5, secondaryColor.rgba(0.15));
+completionGradient.addColorStop(1, secondaryColor.rgba(0.02));
+
 new Chart(completionCtx, {
     type: 'line',
-    data: {
-        labels: {!! json_encode($completionByMonth->pluck('month')) !!},
-        datasets: [{
-            label: 'Ujian Selesai',
-            data: {!! json_encode($completionByMonth->pluck('count')) !!},
+            data: {
+                labels: {!! json_encode($completionByMonth->pluck('month')) !!},
+                datasets: [{
+                    label: 'Ujian Selesai',
+                    data: {!! json_encode($completionByMonth->pluck('count')) !!},
                     borderColor: secondaryColor.rgb,
-                    backgroundColor: secondaryColor.rgba(0.1),
-            tension: 0.4,
+                    backgroundColor: completionGradient,
+                    tension: 0.4,
                     fill: true,
                     borderWidth: 2
-        }]
-    },
+                }]
+            },
     options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -353,22 +358,27 @@ new Chart(completionCtx, {
 
 // Score Distribution Chart
 const scoreDistCtx = document.getElementById('scoreDistributionChart').getContext('2d');
+const scoreDistGradients = [];
+const scoreData = {!! json_encode($scoreDistribution->pluck('count')) !!};
+for (let i = 0; i < scoreData.length; i++) {
+    const gradient = scoreDistCtx.createLinearGradient(0, 0, 0, 300);
+    const baseOpacity = 0.95 - (i * 0.12);
+    gradient.addColorStop(0, secondaryColor.rgba(Math.max(baseOpacity, 0.6)));
+    gradient.addColorStop(0.6, secondaryColor.rgba(Math.max(baseOpacity * 0.8, 0.4)));
+    gradient.addColorStop(1, secondaryColor.rgba(Math.max(baseOpacity * 0.5, 0.2)));
+    scoreDistGradients.push(gradient);
+}
+
 new Chart(scoreDistCtx, {
     type: 'bar',
-    data: {
-        labels: {!! json_encode($scoreDistribution->pluck('score_range')) !!},
-        datasets: [{
-            label: 'Jumlah',
-            data: {!! json_encode($scoreDistribution->pluck('count')) !!},
-            backgroundColor: [
-                        secondaryColor.rgba(0.9),
-                        secondaryColor.rgba(0.75),
-                        secondaryColor.rgba(0.6),
-                        secondaryColor.rgba(0.45),
-                        secondaryColor.rgba(0.3)
-            ]
-        }]
-    },
+            data: {
+                labels: {!! json_encode($scoreDistribution->pluck('score_range')) !!},
+                datasets: [{
+                    label: 'Jumlah',
+                    data: {!! json_encode($scoreDistribution->pluck('count')) !!},
+                    backgroundColor: scoreDistGradients
+                }]
+            },
     options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -393,21 +403,27 @@ new Chart(scoreDistCtx, {
 
 // Category Performance Chart
 const categoryCtx = document.getElementById('categoryPerformanceChart').getContext('2d');
+const categoryGradients = [];
+const categoryCount = {!! $performanceByCategory->count() !!};
+const hues = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270];
+for (let i = 0; i < Math.max(categoryCount, 5); i++) {
+    const gradient = categoryCtx.createRadialGradient(0, 0, 0, 0, 0, 100);
+    const baseOpacity = 0.9 - (i * 0.12);
+    gradient.addColorStop(0, secondaryColor.rgba(Math.min(baseOpacity, 0.9)));
+    gradient.addColorStop(0.7, secondaryColor.rgba(Math.max(baseOpacity * 0.75, 0.4)));
+    gradient.addColorStop(1, secondaryColor.rgba(Math.max(baseOpacity * 0.5, 0.25)));
+    categoryGradients.push(gradient);
+}
+
 new Chart(categoryCtx, {
     type: 'doughnut',
-    data: {
-        labels: {!! json_encode($performanceByCategory->pluck('name')) !!},
-        datasets: [{
-            data: {!! json_encode($performanceByCategory->pluck('avg_score')) !!},
-            backgroundColor: [
-                        secondaryColor.rgba(0.9),
-                        secondaryColor.rgba(0.75),
-                        secondaryColor.rgba(0.6),
-                        secondaryColor.rgba(0.45),
-                        secondaryColor.rgba(0.3)
-            ]
-        }]
-    },
+            data: {
+                labels: {!! json_encode($performanceByCategory->pluck('name')) !!},
+                datasets: [{
+                    data: {!! json_encode($performanceByCategory->pluck('avg_score')) !!},
+                    backgroundColor: categoryGradients.slice(0, categoryCount)
+                }]
+            },
     options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -421,6 +437,11 @@ new Chart(categoryCtx, {
 
 // Daily Activity Chart
 const dailyCtx = document.getElementById('dailyActivityChart').getContext('2d');
+const dailyGradient = dailyCtx.createLinearGradient(0, 0, 0, 300);
+dailyGradient.addColorStop(0, secondaryColor.rgba(0.9));
+dailyGradient.addColorStop(0.5, secondaryColor.rgba(0.7));
+dailyGradient.addColorStop(1, secondaryColor.rgba(0.45));
+
 new Chart(dailyCtx, {
     type: 'bar',
             data: {
@@ -428,7 +449,8 @@ new Chart(dailyCtx, {
                 datasets: [{
                     label: 'Ujian Selesai',
                     data: {!! json_encode($dailyActivity->pluck('count')) !!},
-                    backgroundColor: secondaryColor.rgba(0.8)
+                    backgroundColor: dailyGradient,
+                    borderRadius: 4
                 }]
             },
     options: {

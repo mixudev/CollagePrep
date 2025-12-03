@@ -110,9 +110,18 @@ class SettingController extends Controller
                     $value = isset($request->settings[$key]) && $request->settings[$key] == '1' ? '1' : '0';
                 } elseif ($setting->type === 'number') {
                     $value = is_numeric($value) ? $value : 0;
-                } elseif ($setting->type === 'color') {
-                    // Validate hex color
-                    $value = preg_match('/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $value) ? $value : ($setting->value ?: '#111827');
+                                                } elseif ($setting->type === 'color') {
+                                                    // Validate and normalize hex color
+                                                    $value = trim($value);
+                                                    if (!str_starts_with($value, '#')) {
+                                                        $value = '#' . $value;
+                                                    }
+                                                    // Convert 3-digit to 6-digit hex if needed
+                                                    if (preg_match('/^#([A-Fa-f0-9]{3})$/', $value)) {
+                                                        $value = '#' . $value[1] . $value[1] . $value[2] . $value[2] . $value[3] . $value[3];
+                                                    }
+                                                    // Validate hex color
+                                                    $value = preg_match('/^#([A-Fa-f0-9]{6})$/', $value) ? strtoupper($value) : ($setting->value ?: ($setting->key === 'primary_color' ? '#111827' : '#f97316'));
                 } else {
                     $value = $value ?? '';
                 }
